@@ -23,9 +23,7 @@ jobs:
               --tags project=capstone \
               --stack-name capstone-eks
         
-      - run: aws cloudformation list-exports
-            
-        # aws cloudformation list-exports --query "Exports[?Name==\`SubnetIds\`].Value" --no-paginate --output text
+      - run: aws cloudformation list-exports --query "Exports[?Name==\`SubnetIds\`].Value" --no-paginate --output text
       # - run:
       #     name: Ensure backend infrastructure exists
       #     command: |
