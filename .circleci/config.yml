@@ -19,7 +19,7 @@ jobs:
           name: Ensure backend infrastructure exists
           command: |
             aws cloudformation deploy \
-              --template-file .circleci/files/vpc.yml \
+              --template-file .circleci/files/vpc.yaml \
               --tags project=capstone \
               --stack-name capstone-eks  
         
