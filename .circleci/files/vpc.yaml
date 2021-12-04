@@ -198,6 +198,8 @@ Outputs:
       - HasMoreThan2Azs
       - !Join [ ",", [ !Ref Subnet01, !Ref Subnet02, !Ref Subnet03 ] ]
       - !Join [ ",", [ !Ref Subnet01, !Ref Subnet02 ] ]
+    Export:
+      Name: SubnetIds
 
   SecurityGroups:
     Description: Security group for the cluster control plane communication with worker nodes
