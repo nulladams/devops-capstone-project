@@ -14,6 +14,15 @@ jobs:
           name: Install dependencies
           command: |
             yum -y install tar gzip jq
+      
+      - run:
+          name: Ensure backend infrastructure exists
+          command: |
+            aws cloudformation deploy \
+              --template-file .circleci/files/vpc.yml \
+              --tags project=capstone \
+              --stack-name capstone-eks  
+        
       # - run:
       #     name: Ensure backend infrastructure exists
       #     command: |
