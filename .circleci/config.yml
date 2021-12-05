@@ -37,10 +37,16 @@ jobs:
 
               role_arn=$(aws iam get-role --role-name capstone-eks-role | jq .Role.Arn | sed s/\"//g)
 
-              aws eks create-cluster \
-              --name capstone-eks \
-              --role-arn $role_arn \
-              --resources-vpc-config subnetIds=$subnets,securityGroupIds=$secgroups,endpointPublicAccess=true,endpointPrivateAccess=false
+              cluster=$(aws eks describe-cluster --name capstone-eks | jq .cluster)
+
+              if [[ -n $cluster ]]; then
+                aws eks create-cluster \
+                --name capstone-eks \
+                --role-arn $role_arn \
+                --resources-vpc-config subnetIds=$subnets,securityGroupIds=$secgroups,endpointPublicAccess=true,endpointPrivateAccess=false
+              else
+                echo "Cluster already exist"
+              fi
 
               aws eks list-clusters
 
