@@ -6,7 +6,7 @@
             "Principal": {
                 "Service": "eks.amazonaws.com"
             },
-            "Action": "ssts:AssumeRole"
+            "Action": "sts:AssumeRole"
         }
     ]
 }
