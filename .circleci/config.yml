@@ -51,7 +51,7 @@ jobs:
 
               aws eks list-clusters
 
-              aws eks describe-cluster --name capstone-eks
+              #aws eks describe-cluster --name capstone-eks
 
 
       
