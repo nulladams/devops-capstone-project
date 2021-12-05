@@ -40,12 +40,13 @@ jobs:
               cluster=$(aws eks describe-cluster --name capstone-eks | jq .cluster)
 
               if [[ -n $cluster ]]; then
+                echo "Cluster already exist"
+              else
                 aws eks create-cluster \
                 --name capstone-eks \
                 --role-arn $role_arn \
                 --resources-vpc-config subnetIds=$subnets,securityGroupIds=$secgroups,endpointPublicAccess=true,endpointPrivateAccess=false
-              else
-                echo "Cluster already exist"
+                
               fi
 
               aws eks list-clusters
