@@ -54,22 +54,7 @@ jobs:
               aws eks describe-cluster --name capstone-eks
 
 
-      - run: 
-          name: create k8s cluster
-          command: | 
-              subnets=$(aws cloudformation list-exports --query "Exports[?Name==\`SubnetIds\`].Value" --no-paginate --output text)
-              secgroups=$(aws cloudformation list-exports --query "Exports[?Name==\`SecurityGroups\`].Value" --no-paginate --output text)
-              echo $subnets
-              echo $secgroups
-
-              aws eks create-cluster \
-              --name capstone-eks \
-              --role-arn $role_arn \
-              --resources-vpc-config subnetIds=$subnets,securityGroupIds=$secgroups,endpointPublicAccess=true,endpointPrivateAccess=false
-
-              aws eks list-clusters
-
-              aws eks describe-cluster --name capstone-eks
+      
 
 
       # - run:
