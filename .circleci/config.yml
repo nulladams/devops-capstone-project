@@ -23,7 +23,13 @@ jobs:
               --tags project=capstone \
               --stack-name capstone-eks
         
-      - run: aws cloudformation list-exports --query "Exports[?Name==\`SubnetIds\`].Value" --no-paginate --output text
+      - run: 
+        name: save subnets and security groups
+        command: | 
+            subnets=$(aws cloudformation list-exports --query "Exports[?Name==\`SubnetIds\`].Value" --no-paginate --output text)
+            secgroups=$(aws cloudformation list-exports --query "Exports[?Name==\`SecurityGroups\`].Value" --no-paginate --output text)
+            echo $subnets
+            echo $secgroups
       # - run:
       #     name: Ensure backend infrastructure exists
       #     command: |
