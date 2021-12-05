@@ -35,6 +35,7 @@ jobs:
               # role_arn=$(aws iam create-role --role-name capstone-eks-role --assume-role-policy-document file://assume-policy.json | jq .Role.Arn | sed s/\"//g)
               # aws iam attach-role-policy --role-name capstone-eks-role --policy-arn  arn:aws:iam::aws:policy/AmazonEKSClusterPolicy
 
+              role_arn=$(aws iam get-role --role-name capstone-eks-role | jq .Role.Arn | sed s/\"//g)
 
               aws eks create-cluster \
               --name capstone-eks \
