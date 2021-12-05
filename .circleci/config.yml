@@ -32,8 +32,8 @@ jobs:
               echo $secgroups
 
               # create role for EKS
-              role_arn=$(aws iam create-role --role-name capstone-eks-role --assume-role-policy-document file://assume-policy.json | jq .Role.Arn | sed s/\"//g)
-              aws iam attach-role-policy --role-name capstone-eks-role --policy-arn  arn:aws:iam::aws:policy/AmazonEKSClusterPolicy
+              # role_arn=$(aws iam create-role --role-name capstone-eks-role --assume-role-policy-document file://assume-policy.json | jq .Role.Arn | sed s/\"//g)
+              # aws iam attach-role-policy --role-name capstone-eks-role --policy-arn  arn:aws:iam::aws:policy/AmazonEKSClusterPolicy
 
 
               aws eks create-cluster \
@@ -45,7 +45,7 @@ jobs:
 
               aws eks describe-cluster --name capstone-eks
 
-              
+
       - run: 
           name: create k8s cluster
           command: | 
