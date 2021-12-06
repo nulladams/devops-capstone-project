@@ -54,11 +54,13 @@ jobs:
               #aws eks describe-cluster --name capstone-eks
               role_nodes_arn=$(aws iam get-role --role-name capstone-eks-role-nodes | jq .Role.Arn | sed s/\"//g)
 
+              subnet1=(${subnets//,/ }[0])
+
               aws eks create-nodegroup \
               --cluster-name capstone-eks \
               --nodegroup-name node1 \
               --node-role $role_nodes_arn \
-              --subnets ${subnets//,/ }[0] \
+              --subnets subnet1 \
               --disk-size 200 \
               --scaling-config minSize=1,maxSize=2,desiredSize=1 \
               --instance-types t2.small
