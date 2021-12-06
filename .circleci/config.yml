@@ -52,20 +52,30 @@ jobs:
               aws eks list-clusters
 
               #aws eks describe-cluster --name capstone-eks
-
               role_nodes_arn=$(aws iam get-role --role-name capstone-eks-role-nodes | jq .Role.Arn | sed s/\"//g)
 
-              if [[ -n $role_nodes_arn ]]; then
-                echo "Role already exist"
-              else
-                role_nodes_arn=$(aws iam create-role --role-name capstone-eks-role-nodes --assume-role-policy-document file://assume-node-policy.json | jq .Role.Arn | sed s/\"//g)
-              fi
+              aws eks create-nodegroup \
+              --cluster-name capstone-eks \
+              --nodegroup-name node1 \
+              --node-role $role_nodes_arn \
+              --subnets ${subnets[0]} \
+              --disk-size 200 \
+              --scaling-config minSize=1,maxSize=2,desiredSize=1 \
+              --instance-types t2.small
+
+
+              # if [[ -n $role_nodes_arn ]]; then
+              #   echo "Role already exist"
+              # else
+              #   role_nodes_arn=$(aws iam create-role --role-name capstone-eks-role-nodes --assume-role-policy-document file://assume-node-policy.json | jq .Role.Arn | sed s/\"//g)
+              # fi
 
               # create role for nodes
               
-
-              role_arn=$(aws iam create-role --role-name getting-started-eks-role-nodes --assume-role-policy-document file://assume-node-policy.json | jq .Role.Arn | sed s/\"//g)
-
+              # role_arn=$(aws iam create-role --role-name capstone-eks-role-nodes --assume-role-policy-document file://assume-node-policy.json | jq .Role.Arn | sed s/\"//g)
+              # aws iam attach-role-policy --role-name getting-started-eks-role-nodes --policy-arn  arn:aws:iam::aws:policy/AmazonEKSWorkerNodePolicy
+              # aws iam attach-role-policy --role-name getting-started-eks-role-nodes --policy-arn  arn:aws:iam::aws:policy/AmazonEKS_CNI_Policy
+              # aws iam attach-role-policy --role-name getting-started-eks-role-nodes --policy-arn  arn:aws:iam::aws:policy/AmazonEC2ContainerRegistryReadOnly
 
       
 
