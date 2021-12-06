@@ -58,7 +58,7 @@ jobs:
               --cluster-name capstone-eks \
               --nodegroup-name node1 \
               --node-role $role_nodes_arn \
-              --subnets (${subnets//,/ }[0]) \
+              --subnets ${subnets//,/ }[0] \
               --disk-size 200 \
               --scaling-config minSize=1,maxSize=2,desiredSize=1 \
               --instance-types t2.small
