@@ -56,14 +56,20 @@ jobs:
 
               subnet1=(${subnets//,/ }[0])
 
-              aws eks create-nodegroup \
-              --cluster-name capstone-eks \
-              --nodegroup-name node1 \
-              --node-role $role_nodes_arn \
-              --subnets $subnet1 \
-              --disk-size 200 \
-              --scaling-config minSize=1,maxSize=2,desiredSize=1 \
-              --instance-types t2.small
+              node1=$(aws eks describe-nodegroup --nodegroup-name node1 --cluster-name capstone-eks | jq .nodegroup.nodegroupName | sed s/\"//g)
+
+              if [[ "$node1" == ""node1 ]]; then
+                echo "node group already exist"
+              else
+                aws eks create-nodegroup \
+                --cluster-name capstone-eks \
+                --nodegroup-name node1 \
+                --node-role $role_nodes_arn \
+                --subnets $subnet1 \
+                --disk-size 200 \
+                --scaling-config minSize=1,maxSize=2,desiredSize=1 \
+                --instance-types t2.small
+              fi
 
 
               # if [[ -n $role_nodes_arn ]]; then
