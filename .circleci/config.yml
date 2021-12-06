@@ -53,12 +53,12 @@ jobs:
 
               #aws eks describe-cluster --name capstone-eks
 
-              role-nodes_arn=$(aws iam get-role --role-name capstone-eks-role-nodes | jq .Role.Arn | sed s/\"//g)
+              role_nodes_arn=$(aws iam get-role --role-name capstone-eks-role-nodes | jq .Role.Arn | sed s/\"//g)
 
-              if [[ -n $role-nodes_arn ]]; then
+              if [[ -n $role_nodes_arn ]]; then
                 echo "Role already exist"
               else
-                role-nodes_arn=$(aws iam create-role --role-name capstone-eks-role-nodes --assume-role-policy-document file://assume-node-policy.json | jq .Role.Arn | sed s/\"//g)
+                role_nodes_arn=$(aws iam create-role --role-name capstone-eks-role-nodes --assume-role-policy-document file://assume-node-policy.json | jq .Role.Arn | sed s/\"//g)
               fi
 
               # create role for nodes
