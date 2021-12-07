@@ -51,6 +51,8 @@ jobs:
 
               aws eks list-clusters
 
+              
+
               #aws eks describe-cluster --name capstone-eks
               role_nodes_arn=$(aws iam get-role --role-name capstone-eks-role-nodes | jq .Role.Arn | sed s/\"//g)
 
