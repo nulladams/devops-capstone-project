@@ -51,8 +51,6 @@ jobs:
 
               aws eks list-clusters
 
-              
-
               #aws eks describe-cluster --name capstone-eks
               role_nodes_arn=$(aws iam get-role --role-name capstone-eks-role-nodes | jq .Role.Arn | sed s/\"//g)
 
@@ -60,7 +58,7 @@ jobs:
 
               node1=$(aws eks describe-nodegroup --nodegroup-name node1 --cluster-name capstone-eks | jq .nodegroup.nodegroupName | sed s/\"//g)
 
-              if [[ "$node1" == ""node1 ]]; then
+              if [[ "$node1" == "node1" ]]; then
                 echo "node group already exist"
               else
                 aws eks create-nodegroup \
