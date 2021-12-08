@@ -21,7 +21,7 @@ jobs:
             aws cloudformation deploy \
               --template-file .circleci/files/vpc.yaml \
               --tags project=capstone \
-              --stack-name capstone-eks
+              --stack-name capstone-eks-stack
         
       - run: 
           name: create k8s cluster
