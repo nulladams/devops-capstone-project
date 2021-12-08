@@ -40,8 +40,10 @@ jobs:
               #cluster=$(aws eks describe-cluster --name capstone-eks | jq .cluster)
 
               #cluster=$(aws eks list-clusters | jq -c '.[] | select(.name=="capstone-eks")' | jq .name)
+              cluster=$(aws eks list-clusters | jq '.clusters' | jq 'contains(["capstone-eks"])')
 
-              if [[ -n $cluster ]]; then
+              #if [[ -n $cluster ]]; then
+              if [[ $cluster == true ]]; then
                 echo "Cluster already exist"
               else
                 aws eks create-cluster \
