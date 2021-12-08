@@ -37,7 +37,9 @@ jobs:
 
               role_arn=$(aws iam get-role --role-name capstone-eks-role | jq .Role.Arn | sed s/\"//g)
 
-              cluster=$(aws eks describe-cluster --name capstone-eks | jq .cluster)
+              #cluster=$(aws eks describe-cluster --name capstone-eks | jq .cluster)
+
+              #cluster=$(aws eks list-clusters | jq -c '.[] | select(.name=="capstone-eks")' | jq .name)
 
               if [[ -n $cluster ]]; then
                 echo "Cluster already exist"
