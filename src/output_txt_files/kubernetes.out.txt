@@ -1,0 +1,20 @@
+kubectl apply -f .\k8s\deployment.yaml
+kubectl get pods
+NAME                               READY   STATUS     RESTARTS   AGE
+project4-deploy-6697859c96-hgwhb   0/2     Init:0/1   0          10s
+
+kubectl get deploy
+NAME              READY   UP-TO-DATE   AVAILABLE   AGE
+project4-deploy   1/1     1            1           2m19s
+
+kubectl apply -f .\k8s\service.yaml
+kubectl get services
+kubernetes         ClusterIP      10.96.0.1       <none>        443/TCP        17d
+project4-service   ClusterIP      10.105.76.216   <none>        8080/TCP       7s
+
+kubectl port-forward project4-deploy-6697859c96-hgwhb 8080:80
+Forwarding from 127.0.0.1:8080 -> 80
+Forwarding from [::1]:8080 -> 80
+Handling connection for 8080
+Handling connection for 8080
+
