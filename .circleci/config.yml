@@ -181,5 +181,5 @@ workflows:
   default:
     jobs:
       - build-image
-      - deploy-infrastructure
+      - deploy-infrastructure:
           requires: [build-image]
