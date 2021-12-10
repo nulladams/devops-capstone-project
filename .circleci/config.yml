@@ -55,9 +55,10 @@ jobs:
       - run:
           name: build docker image
           command: |
-            docker build --tag=capstone .
-            docker image ls
-            dockerpath=leoadams/capstone
+            ls -la
+            # docker build --tag=capstone .
+            # docker image ls
+            # dockerpath=leoadams/capstone
 
 
 
@@ -198,5 +199,5 @@ workflows:
       - linting
       - build:
           requires: [linting]    
-      - deploy-infrastructure:
-          requires: [build]
+      # - deploy-infrastructure:
+      #     requires: [build]
