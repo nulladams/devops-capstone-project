@@ -48,8 +48,13 @@ jobs:
             make lint
     
   build:
+    environment:
+      IMAGE_NAME: leoadams/capstone
     docker:
       - image: docker:latest
+        auth:
+          username: $DOCKERHUB_USERNAME
+          password: $DOCKERHUB_PASSWORD
     steps:
       - checkout
       - setup_remote_docker
@@ -68,8 +73,11 @@ jobs:
           command: |
             ls -la
             # docker build --tag=capstone .
-            docker build --cache-from=capstone -t leoadams/capstone .
+            docker build --cache-from=capstone -t $IMAGE_NAME .
             docker image ls
+
+            
+            docker login -u leoadams
             
             
       - run:
@@ -88,6 +96,7 @@ jobs:
             docker image ls
             dockerpath=leoadams/capstone
             echo "Docker ID and Image: $dockerpath"
+            echo "$DOCKERHUB_ACCESS_TOKEN" | docker login -u "$DOCKERHUB_USERNAME" --password-stdin
             docker push leoadams/capstone:latest
             # if [ "$ {CIRCLE_BRANCH}" == "master" ]; then
             #   login="$(aws ecr get-login)"
