@@ -75,10 +75,6 @@ jobs:
             # docker build --tag=capstone .
             docker build --cache-from=capstone -t $IMAGE_NAME .
             docker image ls
-
-            
-            docker login -u leoadams
-            
             
       - run:
           name: Save Docker image layer cache
