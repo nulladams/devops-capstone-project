@@ -1,13 +1,13 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: project4-deploy
+  name: capstone-deploy
   labels:
-    app: project4
+    app: capstone
 spec:
   selector:
     matchLabels:
-      app: project4
+      app: capstone
   replicas: 1
   strategy:
     type: RollingUpdate
@@ -17,11 +17,11 @@ spec:
   template:
     metadata:
       labels:
-        app: project4
+        app: capstone
     spec:
       containers:
-      - name: project4
-        image: leoadams/project4:latest
+      - name: capstone
+        image: leoadams/capstone:latest
         #imagePullPolicy: Always
         ports:
           - containerPort: 80
