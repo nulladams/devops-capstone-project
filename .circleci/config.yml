@@ -52,13 +52,36 @@ jobs:
       - image: docker:latest
     steps:
       - checkout
+      - setup_remote_docker
+      - restore_cache:
+        keys:
+          - v1-{{ .Branch }}
+        paths:
+          - /caches/capstone.tar
       - run:
-          name: build docker image
-          command: |
+        name: Load Docker image layer cache
+        command: |
+          set +o pipefail
+          docker load -i /caches/capstone.tar | true
+      - run:
+        name: Build application Docker image
+        command: |
             ls -la
-            docker build --tag=capstone .
+            # docker build --tag=capstone .
+            docker build --cache-from=capstone -t capstone .
             docker image ls
             dockerpath=leoadams/capstone
+            
+      - run:
+        name: Save Docker image layer cache
+        command: |
+          mkdir -p /caches
+          docker save -o /caches/capstone.tar capstone
+      - save_cache:
+        key: v1-{{ .Branch }}-{{ epoch }}
+        paths:
+          - /caches/capstone.tar
+
 
 
 
