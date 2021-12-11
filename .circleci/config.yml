@@ -136,9 +136,9 @@ jobs:
               # aws iam attach-role-policy --role-name capstone-eks-role --policy-arn  arn:aws:iam::aws:policy/AmazonEKSClusterPolicy
 
               #role_arn=$(aws iam get-role --role-name capstone-eks-role | jq .Role.Arn | sed s/\"//g)
-              eks-role=$(aws iam list-roles | jq '.Roles' | jq '.[] | select(.RoleName=="capstone-eks-role")')
+              eks_role=$(aws iam list-roles | jq '.Roles' | jq '.[] | select(.RoleName=="capstone-eks-role")')
 
-              if [[ -n $eks-role ]]; then
+              if [[ -n $eks_role ]]; then
                 echo "Role already exist"
                 role_arn=$(aws iam get-role --role-name capstone-eks-role | jq .Role.Arn | sed s/\"//g)
               else
@@ -168,9 +168,9 @@ jobs:
               #role_nodes_arn=$(aws iam get-role --role-name capstone-eks-role-nodes | jq .Role.Arn | sed s/\"//g)
               #role_arn=$(aws iam create-role --role-name capstone-eks-role-nodes --assume-role-policy-document file://assume-node-policy.json | jq .Role.Arn | sed s/\"//g)
 
-              node-role=$(aws iam list-roles | jq '.Roles' | jq '.[] | select(.RoleName=="capstone-eks-role-nodes")')
+              node_role=$(aws iam list-roles | jq '.Roles' | jq '.[] | select(.RoleName=="capstone-eks-role-nodes")')
 
-              if [[ -n $node-role ]]; then
+              if [[ -n $node_role ]]; then
                 echo "Role already exist"
                 role_nodes_arn=$(aws iam get-role --role-name capstone-eks-role-nodes | jq .Role.Arn | sed s/\"//g)
               else
