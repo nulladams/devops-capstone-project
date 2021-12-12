@@ -1,8 +1,12 @@
-[![CircleCI](https://circleci.com/gh/nulladams/project4-devops/tree/master.svg?style=svg)](https://circleci.com/gh/nulladams/project4-devops/tree/master)
+# Capstone Project
 
-# project4-devops
+The project was build using Circleci for Continous Integration(CI), Flux for Continous Deployment(CD), and Kubernetes as cloud platform. The app that is deployed is the one developed on project 4, about a Machine Learning Microservice.
 
-This project operationalize a Machine Learning Microservice API. A sklearn model has been trained to predict housing prices in Boston according to several features, such as average rooms in a home and data about highway access, teacher-to-pupil ratios, and so on. You can read more about the data, which was initially taken from Kaggle, on the data source site. This project tests your ability to operationalize a Python flask app—in a provided file, app.py
+Here are steps to build the CI/CD pipeline(GitOps):
+
+- Run the CI pipeline by pushing the code to github or run the workflow in the Circleci app. This will lint the code, build the app image and upload it to DockerHub and create the infrastructure using aws cloudformation to create the VPC, subnetes and security groups, and Kubernetes cluster and node.
+- 
+
 
 ## Running the project
 
@@ -24,4 +28,20 @@ Project files can be found inside the src directory:
 - run_kubernetes.sh* - script to create and run pods with the app container
 - upload_docker.sh* - script to upload the docker image to the cloud
 
+To delete the cluster, nodes and roles:
+
+aws eks delete-nodegroup --cluster-name capstone-eks --nodegroup-name node1
+
+aws eks delete-cluster --name capstone-ek
+
+aws iam detach-role-policy --role-name capstone-eks-role --policy-arn  arn:aws:iam::aws:policy/AmazonEKSClusterPolicy
+aws iam delete-role --role-name capstone-eks-role
+
+aws iam detach-role-policy --role-name capstone-eks-role-nodes --policy-arn  arn:aws:iam::aws:policy/AmazonEKSWorkerNodePolicy
+aws iam detach-role-policy --role-name capstone-eks-role-nodes --policy-arn  arn:aws:iam::aws:policy/AmazonEKS_CNI_Policy
+aws iam detach-role-policy --role-name capstone-eks-role-nodes --policy-arn  arn:aws:iam::aws:policy/AmazonEC2ContainerRegistryReadOnly
+
+aws iam delete-role --role-name capstone-eks-role-nodes
+
+aws cloudformation delete-stack --stack-name capstone-eks-stack
 

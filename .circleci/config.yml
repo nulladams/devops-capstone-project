@@ -174,7 +174,7 @@ jobs:
                 echo "Role already exist"
                 role_nodes_arn=$(aws iam get-role --role-name capstone-eks-role-nodes | jq .Role.Arn | sed s/\"//g)
               else
-                role_nodes_arn=$(aws iam create-role --role-name capstone-eks-role-nodes --assume-role-policy-document file://assume-bode-policy.json | jq .Role.Arn | sed s/\"//g)
+                role_nodes_arn=$(aws iam create-role --role-name capstone-eks-role-nodes --assume-role-policy-document file://assume-node-policy.json | jq .Role.Arn | sed s/\"//g)
                 aws iam attach-role-policy --role-name capstone-eks-role-nodes --policy-arn  arn:aws:iam::aws:policy/AmazonEKSWorkerNodePolicy
                 aws iam attach-role-policy --role-name capstone-eks-role-nodes --policy-arn  arn:aws:iam::aws:policy/AmazonEKS_CNI_Policy
                 aws iam attach-role-policy --role-name capstone-eks-role-nodes --policy-arn  arn:aws:iam::aws:policy/AmazonEC2ContainerRegistryReadOnly
