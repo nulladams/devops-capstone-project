@@ -73,7 +73,7 @@ jobs:
           command: |
             ls -la
             # docker build --tag=capstone .
-            docker build --cache-from=capstone -t $IMAGE_NAME .
+            docker build --cache-from=capstone -t "${IMAGE_NAME}:1" .
             #docker build --cache-from=capstone -t "${IMAGE_NAME}:${CIRCLE_SHA1}" . 
             docker image ls
             
