@@ -49,7 +49,7 @@ jobs:
     
   build:
     environment:
-      IMAGE_NAME: leoadams/capstone
+      IMAGE_NAME: leoadams/capstone-1
     docker:
       - image: docker:latest
         auth:
