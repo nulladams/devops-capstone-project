@@ -73,8 +73,8 @@ jobs:
           command: |
             ls -la
             # docker build --tag=capstone .
-            docker build --cache-from=capstone -t "${IMAGE_NAME}:1" .
-            #docker build --cache-from=capstone -t "${IMAGE_NAME}:${CIRCLE_SHA1}" . 
+            #docker build --cache-from=capstone -t "${IMAGE_NAME}:1" .
+            docker build --cache-from=capstone -t "${IMAGE_NAME}:${CIRCLE_SHA1}" . 
             docker image ls
             
       - run:
@@ -94,9 +94,9 @@ jobs:
             dockerpath=leoadams/capstone
             echo "Docker ID and Image: $dockerpath"
             echo "$DOCKERHUB_ACCESS_TOKEN" | docker login -u "$DOCKERHUB_USERNAME" --password-stdin
-            docker push "${IMAGE_NAME}:1"
+            #docker push "${IMAGE_NAME}:1"
             #docker push leoadams/capstone:latest
-            #docker push "${IMAGE_NAME}:${CIRCLE_SHA1}"
+            docker push "${IMAGE_NAME}:${CIRCLE_SHA1}"
             # if [ "$ {CIRCLE_BRANCH}" == "master" ]; then
             #   login="$(aws ecr get-login)"
             #   ${login}
@@ -107,6 +107,8 @@ jobs:
 
 
   deploy-infrastructure:
+    environment:
+      IMAGE_NAME: leoadams/capstone
     docker:
       # Docker image here that supports AWS CLI
       - image: amazon/aws-cli
@@ -204,8 +206,16 @@ jobs:
                 --instance-types t2.small
               fi
 
-              
+              aws eks update-kubeconfig --name capstone-eks --region us-west-2
 
+              curl -LO https://storage.googleapis.com/kubernetes-release/release/$(curl -s https://storage.googleapis.com/kubernetes-release/release/stable.txt)/bin/linux/amd64/kubectl
+              chmod +x ./kubectl && mv ./kubectl /usr/local/bin/kubectl
+
+              #kubectl get deploy capstone-deploy -o=yaml | sed -e "s/$BlueVersion/${{CF_SHORT_REVISION}}/g" | kubectl apply --namespace=${NAMESPACE} -f - #Update Service YAML with Green version
+              #kubectl patch deploy capstone-deploy -p "{\"spec\":{\"template\": {\"spec\": {\"template\": \"containers[0]\": \"${VERSION}\"}}}}"
+
+              #export BlueVersion=$(kubectl get service capstone-service)
+              kubectl get service
 
               # if [[ -n $role_nodes_arn ]]; then
               #   echo "Role already exist"
