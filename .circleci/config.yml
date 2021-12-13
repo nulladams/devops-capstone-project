@@ -215,7 +215,7 @@ jobs:
               #kubectl patch deploy capstone-deploy -p "{\"spec\":{\"template\": {\"spec\": {\"template\": \"containers[0]\": \"${VERSION}\"}}}}"
 
               kubectl get service
-              export BlueVersion=$(kubectl get service capstone-service -o=jsonpath='{.spec.selector.version}'))
+              export BlueVersion=$(kubectl get service capstone-service -o=jsonpath='{.spec.selector.version}')
               echo $BlueVersion
 
               # if [[ -n $BlueVersion ]]; then 
