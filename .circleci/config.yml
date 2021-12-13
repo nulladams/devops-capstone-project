@@ -216,6 +216,7 @@ jobs:
 
               kubectl get service
               export BlueVersion=$(kubectl get service capstone-service -o=jsonpath='{.spec.selector.version}'))
+              echo $BlueVersion
 
               # if [[ -n $BlueVersion ]]; then 
               #   echo "show"; 
@@ -223,7 +224,7 @@ jobs:
               #   echo "missing"; 
               # fi
 
-              kubectl get deployment capstone-deploy-$BlueVersion -o=yaml | sed -e "s/$BlueVersion/${CIRCLE_SHA1}/g" | kubectl apply --namespace=${NAMESPACE} -f - #Deploy new version
+              kubectl get deployment capstone-deploy-${BlueVersion} -o=yaml | sed -e "s/$BlueVersion/${CIRCLE_SHA1}/g" | kubectl apply -f - #Deploy new version
 
               kubectl rollout status deployment/capstone-deploy-${CIRCLE_SHA1}
 
@@ -240,10 +241,6 @@ jobs:
                 return 1
               fi
 
-              
-
-
-              
 
               # if [[ -n $role_nodes_arn ]]; then
               #   echo "Role already exist"
