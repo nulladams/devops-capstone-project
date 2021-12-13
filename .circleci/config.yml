@@ -214,8 +214,36 @@ jobs:
               #kubectl get deploy capstone-deploy -o=yaml | sed -e "s/$BlueVersion/${{CF_SHORT_REVISION}}/g" | kubectl apply --namespace=${NAMESPACE} -f - #Update Service YAML with Green version
               #kubectl patch deploy capstone-deploy -p "{\"spec\":{\"template\": {\"spec\": {\"template\": \"containers[0]\": \"${VERSION}\"}}}}"
 
-              #export BlueVersion=$(kubectl get service capstone-service)
               kubectl get service
+              export BlueVersion=$(kubectl get service capstone-service -o=jsonpath='{.spec.selector.version}'))
+
+              # if [[ -n $BlueVersion ]]; then 
+              #   echo "show"; 
+              # else 
+              #   echo "missing"; 
+              # fi
+
+              kubectl get deployment capstone-deploy-$BlueVersion -o=yaml | sed -e "s/$BlueVersion/${CIRCLE_SHA1}/g" | kubectl apply --namespace=${NAMESPACE} -f - #Deploy new version
+
+              kubectl rollout status deployment/capstone-deploy-${CIRCLE_SHA1}
+
+              URL=$(kubectl get service capstone-service -o=jsonpath='{.status.loadBalancer.ingress[0].hostname}')
+
+              page=$(curl ${url}:8080)
+
+              if [[ -n $page ]]
+              then
+                kubectl get service capstone-service -o=yaml | sed -e "s/$BlueVersion/${CIRCLE_SHA1}/g" | kubectl apply -f -
+                kubectl delete deployment capstone-deploy-$BlueVersion #Delete blue version
+                return 0
+              else
+                return 1
+              fi
+
+              
+
+
+              
 
               # if [[ -n $role_nodes_arn ]]; then
               #   echo "Role already exist"
