@@ -1,10 +1,10 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: capstone-deploy
+  name: capstone-deploy-blue
   labels:
     app: capstone
-    version: 0
+    version: blue
 spec:
   selector:
     matchLabels:
@@ -23,7 +23,7 @@ spec:
     spec:
       containers:
       - name: capstone
-        image: leoadams/capstone:1
+        image: leoadams/capstone:blue
         #imagePullPolicy: Always
         ports:
           - containerPort: 80
