@@ -4,10 +4,12 @@ metadata:
   name: capstone-deploy
   labels:
     app: capstone
+    version: 0
 spec:
   selector:
     matchLabels:
       app: capstone
+      version: 0
   replicas: 1
   strategy:
     type: RollingUpdate
