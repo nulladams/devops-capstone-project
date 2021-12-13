@@ -229,8 +229,8 @@ jobs:
               kubectl rollout status deployment/capstone-deploy-${CIRCLE_SHA1}
 
               URL=$(kubectl get service capstone-service -o=jsonpath='{.status.loadBalancer.ingress[0].hostname}')
-
-              page=$(curl ${url}:8080)
+              echo $URL
+              page=$(curl -s "${URL}:8080")
 
               if [[ -n $page ]]
               then
