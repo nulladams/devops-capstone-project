@@ -9,7 +9,7 @@ spec:
   selector:
     matchLabels:
       app: capstone
-      version: 0
+      version: blue
   replicas: 1
   strategy:
     type: RollingUpdate
@@ -20,6 +20,7 @@ spec:
     metadata:
       labels:
         app: capstone
+        version: blue
     spec:
       containers:
       - name: capstone
