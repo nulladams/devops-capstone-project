@@ -230,7 +230,8 @@ jobs:
 
               URL=$(kubectl get service capstone-service -o=jsonpath='{.status.loadBalancer.ingress[0].hostname}')
               echo $URL
-              page=$(curl -s "${URL}:8080")
+              echo "getting page"
+              page=$(curl -s ${URL}:8080)
               echo $page
 
               if [[ -n $page ]]
