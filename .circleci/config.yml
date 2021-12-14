@@ -426,17 +426,17 @@ jobs:
             #   echo "fail"
             #   kubectl delete deployment capstone-deploy-${CIRCLE_SHA1} #Delete blue version
             # fi
-s
+
             export version=$(kubectl get service capstone-service -o=jsonpath='{.spec.selector.version}')
             echo $version
 
-            if [[ $version == "blue" ]]; then
+            if [[ $version == "blue" ]] then
               echo "blue"
-              kubectl set image deployment capstone-deploy-green capstone="${IMAGE_NAME}:${CIRCLE_SHA1}"
+              kubectl set image deployment capstone-deploy-green capstone=$IMAGE_NAME:$CIRCLE_SHA1
               kubectl get service capstone-service -o=yaml | sed -e "s/green/${CIRCLE_SHA1}/g" | kubectl apply -f -
             else
               echo "green"
-              kubectl set image deployment capstone-deploy capstone="${IMAGE_NAME}:${CIRCLE_SHA1}"
+              kubectl set image deployment capstone-deploy capstone=$IMAGE_NAME:$CIRCLE_SHA1
               kubectl get service capstone-service -o=yaml | sed -e "s/blue/${CIRCLE_SHA1}/g" | kubectl apply -f -
             fi
 
