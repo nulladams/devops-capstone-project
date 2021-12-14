@@ -84,9 +84,9 @@ jobs:
             ls -la
             # docker build --tag=capstone .
             #docker build --cache-from=capstone -t "${IMAGE_NAME}:1" .
-
-
-            docker build --cache-from=capstone -t "${IMAGE_NAME}:${CIRCLE_SHA1}" . 
+            
+            # docker build --cache-from=capstone -t "${IMAGE_NAME}:${CIRCLE_SHA1}" .
+            docker build --cache-from=capstone -t "${IMAGE_NAME}:blue" . 
             docker image ls
             
       - run:
@@ -108,7 +108,8 @@ jobs:
             echo "$DOCKERHUB_ACCESS_TOKEN" | docker login -u "$DOCKERHUB_USERNAME" --password-stdin
             #docker push "${IMAGE_NAME}:1"
             #docker push leoadams/capstone:latest
-            docker push "${IMAGE_NAME}:${CIRCLE_SHA1}"
+            #docker push "${IMAGE_NAME}:${CIRCLE_SHA1}"
+            docker push "${IMAGE_NAME}:blue"
             # if [ "$ {CIRCLE_BRANCH}" == "master" ]; then
             #   login="$(aws ecr get-login)"
             #   ${login}
