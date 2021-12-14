@@ -163,7 +163,8 @@ jobs:
           name: Save Docker image layer cache
           command: |
             mkdir -p /caches
-            docker save -o /caches/capstone.tar capstone
+            # docker save -o /caches/capstone.tar capstone
+            docker save -o /caches/capstone.tar "${IMAGE_NAME}:green"
       - save_cache:
           key: v1-{{ .Branch }}-{{ epoch }}
           paths:
