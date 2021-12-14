@@ -169,7 +169,7 @@ jobs:
           paths:
             - /caches/capstone.tar
 
-      - upload:
+      - run:
           name: Push application Docker image
           command: |
             docker image ls
