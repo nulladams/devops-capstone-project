@@ -519,6 +519,11 @@ workflows:
           filters:
             branches:
               only: [green]
+      - deploy-green:
+          requires: [build-green]
+          filters:
+            branches:
+              only: [green]
       - deploy-infrastructure:
           requires: [build]
           filters:
@@ -529,8 +534,3 @@ workflows:
           filters:
             branches:
               only: [main]
-      - deploy-green:
-          requires: [build-green]
-          filters:
-            branches:
-              only: [green]
