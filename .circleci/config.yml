@@ -67,8 +67,7 @@ jobs:
       - run:
           name: install dependencies
           command:
-            apk add --update curl
-            apk add --update python3
+            apk update && apk upgrade && apk add python3
             
             # python -m pip install awscli
 
@@ -134,13 +133,13 @@ jobs:
           paths:
             - /caches/capstone.tar
 
-      - run:
-          name: install dependencies
-          command:
+      # - run:
+      #     name: install dependencies
+      #     command:
           
-            apk add python
-            apk add curl
-            python -m pip install awscli
+      #       apk add python
+      #       apk add curl
+      #       python -m pip install awscli
 
       - run:
           name: Load Docker image layer cache
