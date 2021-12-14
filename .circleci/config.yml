@@ -494,10 +494,10 @@ jobs:
             kubectl get service capstone-service -o=yaml | sed -e "s/${BlueVersion}/green/g" | kubectl apply -f -
 
 
-            page=$(curl ${URL}:8080)
+            page=$(curl $URL:8080)
             echo $page
 
-            if [[ -n ${page} ]]
+            if [[ -n $page ]]
             then
               echo "success"
               kubectl delete deployment capstone-deploy
