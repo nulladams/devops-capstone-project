@@ -69,8 +69,8 @@ jobs:
           command:
           
             apk add --update python
-            apk add --update curl
-            python -m pip install awscli
+            # apk add --update curl
+            # python -m pip install awscli
 
       - run:
           name: Load Docker image layer cache
@@ -100,7 +100,7 @@ jobs:
           paths:
             - /caches/capstone.tar
 
-      - deploy:
+      - run:
           name: Push application Docker image
           command: |
             docker image ls
