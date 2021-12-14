@@ -1,15 +1,15 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: capstone-deploy-blue
+  name: capstone-deploy-v1
   labels:
     app: capstone
-    version: blue
+    version: v1
 spec:
   selector:
     matchLabels:
       app: capstone
-      version: blue
+      version: v1
   replicas: 1
   strategy:
     type: RollingUpdate
@@ -20,11 +20,11 @@ spec:
     metadata:
       labels:
         app: capstone
-        version: blue
+        version: v1
     spec:
       containers:
       - name: capstone
-        image: leoadams/capstone:blue
+        image: leoadams/capstone:v1
         #imagePullPolicy: Always
         ports:
           - containerPort: 80
