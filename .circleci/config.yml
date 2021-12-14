@@ -111,7 +111,7 @@ jobs:
             #docker push leoadams/capstone:latest
 
             #docker push "${IMAGE_NAME}:${CIRCLE_SHA1}"
-            docker push "${IMAGE_NAME}:${CIRCLE_WORKFLOW_ID:0:7}" .
+            docker push "${IMAGE_NAME}:${CIRCLE_WORKFLOW_ID:0:7}"
 
             #docker push "${IMAGE_NAME}:blue"
             # if [ "$ {CIRCLE_BRANCH}" == "master" ]; then
