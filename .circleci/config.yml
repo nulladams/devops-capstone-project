@@ -496,7 +496,7 @@ jobs:
             page=$(curl $URL:8080)
             echo $page
 
-            # if [[ -n $page ]]
+            # if [[ -n ${page} ]]
             # then
             #   echo "success"
             #   kubectl delete deployment capstone-deploy-${BlueVersion}
