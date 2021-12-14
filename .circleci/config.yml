@@ -67,9 +67,9 @@ jobs:
       - run:
           name: install dependencies
           command:
-            apk update
+            
             apk add python
-            apk install curl
+            apk add curl
             python -m pip install awscli
 
       - run:
