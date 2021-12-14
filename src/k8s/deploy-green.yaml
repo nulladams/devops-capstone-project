@@ -1,0 +1,30 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: capstone-deploy-green
+  labels:
+    app: capstone
+    version: green
+spec:
+  selector:
+    matchLabels:
+      app: capstone
+      version: green
+  replicas: 1
+  strategy:
+    type: RollingUpdate
+    rollingUpdate:
+      maxSurge: 1
+      maxUnavailable: 0
+  template:
+    metadata:
+      labels:
+        app: capstone
+        version: green
+    spec:
+      containers:
+      - name: capstone
+        image: leoadams/capstone:green
+        imagePullPolicy: Always
+        ports:
+          - containerPort: 80
