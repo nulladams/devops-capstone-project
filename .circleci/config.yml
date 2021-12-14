@@ -488,6 +488,8 @@ jobs:
             #   kubectl delete deployment capstone-deploy-${CIRCLE_SHA1} #Delete blue version
             # fi
 
+            kubectl apply -f src/k8s/deploy-green.yaml
+
             kubectl get service capstone-service -o=yaml | sed -e "s/${BlueVersion}/green/g" | kubectl apply -f -
 
             # URL=$(kubectl get service capstone-service -o=jsonpath='{.status.loadBalancer.ingress[0].hostname}')
