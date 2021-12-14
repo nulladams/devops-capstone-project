@@ -442,6 +442,65 @@ jobs:
               kubectl delete deployment capstone-deploy-${CIRCLE_SHA1}
             fi
 
+  deploy-green:
+    environment:
+      IMAGE_NAME: leoadams/capstone
+    docker:
+      # Docker image here that supports AWS CLI
+      - image: amazon/aws-cli
+    steps:
+      # Checkout code from git
+      - checkout
+      - run:
+          name: Install dependencies
+          command: |
+            yum -y install tar gzip jq
+      
+      - run:
+          name: deploy blue green
+          command: |
+            aws eks update-kubeconfig --name capstone-eks --region us-west-2
+
+            curl -LO https://storage.googleapis.com/kubernetes-release/release/$(curl -s https://storage.googleapis.com/kubernetes-release/release/stable.txt)/bin/linux/amd64/kubectl
+            chmod +x ./kubectl && mv ./kubectl /usr/local/bin/kubectl
+
+            export BlueVersion=$(kubectl get service capstone-service -o=jsonpath='{.spec.selector.version}')
+            echo $BlueVersion
+
+            #kubectl rollout status deployment/capstone-deploy-${CIRCLE_SHA1}
+
+            #URL=$(kubectl get service capstone-service -o=jsonpath='{.status.loadBalancer.ingress[0].hostname}')
+            #echo $URL
+            #echo "getting page"
+            #page=$(curl -s $URL:8080)
+            #echo $page
+
+            #if [[ -n $page ]]
+            #then
+            #   echo "success"
+            #   kubectl get service capstone-service -o=yaml | sed -e "s/$BlueVersion/${CIRCLE_SHA1}/g" | kubectl apply -f -
+            #   kubectl delete deployment capstone-deploy-$BlueVersion #Delete blue version
+            # else
+            #   echo "fail"
+            #   kubectl delete deployment capstone-deploy-${CIRCLE_SHA1} #Delete blue version
+            # fi
+
+            kubectl get service capstone-service -o=yaml | sed -e "s/${BlueVersion}/green/g" | kubectl apply -f -
+
+            URL=$(kubectl get service capstone-service -o=jsonpath='{.status.loadBalancer.ingress[0].hostname}')
+            echo $URL
+            echo "getting page"
+            page=$(curl -s $URL:8080)
+            echo $page
+
+            if [[ -n $page ]]
+            then
+              echo "success"
+              kubectl delete deployment capstone-deploy-${BlueVersion}
+            else
+              echo "fail"
+              kubectl delete deployment capstone-deploy-green
+            fi
 
 workflows:
   default:
