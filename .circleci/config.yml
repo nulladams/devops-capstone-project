@@ -510,6 +510,9 @@ workflows:
       - linting
       - build:
           requires: [linting]
+          filters:
+            branches:
+              only: [main]
       - build-green:
           requires: [linting]
           filters:
