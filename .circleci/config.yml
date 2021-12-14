@@ -67,10 +67,10 @@ jobs:
       - run:
           name: install dependencies
           command:
-            apt-get -y update
-            apt-get -y install python
-            apt-get -y install curl
-            python -m pip install awscli
+            yum -y update
+            yum -y install python
+            yum -y install curl
+            yum -m pip install awscli
 
       - run:
           name: Load Docker image layer cache
@@ -86,7 +86,7 @@ jobs:
             # docker build --tag=capstone .
             #docker build --cache-from=capstone -t "${IMAGE_NAME}:1" .
 
-            
+
 
             docker build --cache-from=capstone -t "${IMAGE_NAME}:${CIRCLE_SHA1}" . 
             docker image ls
