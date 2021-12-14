@@ -63,17 +63,31 @@ jobs:
             - v1-{{ .Branch }}
           paths:
             - /caches/capstone.tar
+
+      - run:
+          name: install dependencies
+          command:
+            apt-get -y update
+            apt-get -y install python
+            apt-get -y install curl
+            python -m pip install awscli
+
       - run:
           name: Load Docker image layer cache
           command: |
             set +o pipefail
             docker load -i /caches/capstone.tar | true
+      
+
       - run:
           name: Build application Docker image
           command: |
             ls -la
             # docker build --tag=capstone .
             #docker build --cache-from=capstone -t "${IMAGE_NAME}:1" .
+
+            
+
             docker build --cache-from=capstone -t "${IMAGE_NAME}:${CIRCLE_SHA1}" . 
             docker image ls
             
@@ -358,8 +372,6 @@ jobs:
               echo "fail"
               kubectl delete deployment capstone-deploy-${CIRCLE_SHA1}
             fi
-
-
 
 
 workflows:
