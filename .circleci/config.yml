@@ -67,10 +67,10 @@ jobs:
       - run:
           name: install dependencies
           command:
-            yum -y update
-            yum -y install python
-            yum -y install curl
-            yum -m pip install awscli
+            apk update
+            apk add python
+            apk install curl
+            python -m pip install awscli
 
       - run:
           name: Load Docker image layer cache
