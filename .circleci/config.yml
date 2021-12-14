@@ -448,20 +448,20 @@ jobs:
             #kubectl get service capstone-service -o=yaml | sed -e "s/${BlueVersion}/${CIRCLE_SHA1}/g" | kubectl apply -f -
             #kubectl get service capstone-service -o=yaml | sed -e "s/green/${CIRCLE_SHA1}/g" | kubectl apply -f -
 
-            URL=$(kubectl get service capstone-service -o=jsonpath='{.status.loadBalancer.ingress[0].hostname}')
-            echo $URL
-            echo "getting page"
-            page=$(curl -s $URL:8080)
-            echo $page
+            # URL=$(kubectl get service capstone-service -o=jsonpath='{.status.loadBalancer.ingress[0].hostname}')
+            # echo $URL
+            # echo "getting page"
+            # page=$(curl -s $URL:8080)
+            # echo $page
 
-            if [[ -n $page ]]
-            then
-              echo "success"
-              kubectl delete deployment capstone-deploy-green
-            else
-              echo "fail"
-              kubectl delete deployment capstone-deploy-${CIRCLE_SHA1}
-            fi
+            # if [[ -n $page ]]
+            # then
+            #   echo "success"
+            #   kubectl delete deployment capstone-deploy-green
+            # else
+            #   echo "fail"
+            #   kubectl delete deployment capstone-deploy-${CIRCLE_SHA1}
+            # fi
 
   deploy-green:
     environment:
