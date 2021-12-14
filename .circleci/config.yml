@@ -67,7 +67,7 @@ jobs:
       - run:
           name: install dependencies
           command:
-            
+          
             apk add python
             apk add curl
             python -m pip install awscli
@@ -87,7 +87,6 @@ jobs:
             #docker build --cache-from=capstone -t "${IMAGE_NAME}:1" .
 
 
-
             docker build --cache-from=capstone -t "${IMAGE_NAME}:${CIRCLE_SHA1}" . 
             docker image ls
             
@@ -101,7 +100,7 @@ jobs:
           paths:
             - /caches/capstone.tar
 
-      - deploy:
+      - upload:
           name: Push application Docker image
           command: |
             docker image ls
@@ -111,6 +110,77 @@ jobs:
             #docker push "${IMAGE_NAME}:1"
             #docker push leoadams/capstone:latest
             docker push "${IMAGE_NAME}:${CIRCLE_SHA1}"
+            # if [ "$ {CIRCLE_BRANCH}" == "master" ]; then
+            #   login="$(aws ecr get-login)"
+            #   ${login}
+            #   docker tag app "${ECR_ENDPOINT}/app:${CIRCLE_SHA1}"
+            #   docker push "${ECR_ENDPOINT}/app:${CIRCLE_SHA1}"
+            # fi
+            
+  build-green:
+    environment:
+      IMAGE_NAME: leoadams/capstone
+    docker:
+      - image: docker:latest
+        auth:
+          username: $DOCKERHUB_USERNAME
+          password: $DOCKERHUB_PASSWORD
+    steps:
+      - checkout
+      - setup_remote_docker
+      - restore_cache:
+          keys:
+            - v1-{{ .Branch }}
+          paths:
+            - /caches/capstone.tar
+
+      - run:
+          name: install dependencies
+          command:
+          
+            apk add python
+            apk add curl
+            python -m pip install awscli
+
+      - run:
+          name: Load Docker image layer cache
+          command: |
+            set +o pipefail
+            docker load -i /caches/capstone.tar | true
+      
+
+      - run:
+          name: Build application Docker image
+          command: |
+            ls -la
+            # docker build --tag=capstone .
+            #docker build --cache-from=capstone -t "${IMAGE_NAME}:1" .
+            #docker build --cache-from=capstone -t "${IMAGE_NAME}:${CIRCLE_SHA1}" .
+
+            docker build --cache-from=capstone -t "${IMAGE_NAME}:green" . 
+            docker image ls
+            
+      - run:
+          name: Save Docker image layer cache
+          command: |
+            mkdir -p /caches
+            docker save -o /caches/capstone.tar capstone
+      - save_cache:
+          key: v1-{{ .Branch }}-{{ epoch }}
+          paths:
+            - /caches/capstone.tar
+
+      - upload:
+          name: Push application Docker image
+          command: |
+            docker image ls
+            dockerpath=leoadams/capstone
+            echo "Docker ID and Image: $dockerpath"
+            echo "$DOCKERHUB_ACCESS_TOKEN" | docker login -u "$DOCKERHUB_USERNAME" --password-stdin
+            #docker push "${IMAGE_NAME}:1"
+            #docker push leoadams/capstone:latest
+            #docker push "${IMAGE_NAME}:${CIRCLE_SHA1}"
+            docker push "${IMAGE_NAME}:green"
             # if [ "$ {CIRCLE_BRANCH}" == "master" ]; then
             #   login="$(aws ecr get-login)"
             #   ${login}
