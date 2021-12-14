@@ -492,6 +492,21 @@ jobs:
 
             kubectl get service capstone-service -o=yaml | sed -e "s/${BlueVersion}/green/g" | kubectl apply -f -
 
+
+            page=$(curl -s $URL:8080)
+            echo $page
+
+            if [[ -n $page ]]
+            then
+              echo "success"
+              kubectl delete deployment capstone-deploy
+              
+            else
+              echo "fail"
+              kubectl get service capstone-service -o=yaml | sed -e "s/green/${BlueVersion}/g" | kubectl apply -f -
+              kubectl delete deployment capstone-deploy-green
+            fi
+
             # URL=$(kubectl get service capstone-service -o=jsonpath='{.status.loadBalancer.ingress[0].hostname}')
             # echo $URL
             # echo "getting page"
