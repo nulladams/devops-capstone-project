@@ -85,8 +85,9 @@ jobs:
             # docker build --tag=capstone .
             #docker build --cache-from=capstone -t "${IMAGE_NAME}:1" .
             
-            docker build --cache-from=capstone -t "${IMAGE_NAME}:${CIRCLE_SHA1}" .
+            #docker build --cache-from=capstone -t "${IMAGE_NAME}:${CIRCLE_SHA1}" .
             #docker build --cache-from=capstone -t "${IMAGE_NAME}:blue" . 
+            docker build --cache-from=capstone -t "${IMAGE_NAME}:${CIRCLE_WORKFLOW_ID:0:7}" .
             docker image ls
             
       - run:
@@ -109,8 +110,9 @@ jobs:
             #docker push "${IMAGE_NAME}:1"
             #docker push leoadams/capstone:latest
 
-            docker push "${IMAGE_NAME}:${CIRCLE_SHA1}"
-            
+            #docker push "${IMAGE_NAME}:${CIRCLE_SHA1}"
+            docker push "${IMAGE_NAME}:${CIRCLE_WORKFLOW_ID:0:7}" .
+
             #docker push "${IMAGE_NAME}:blue"
             # if [ "$ {CIRCLE_BRANCH}" == "master" ]; then
             #   login="$(aws ecr get-login)"
@@ -435,13 +437,15 @@ jobs:
             if [[ $version == "blue" ]]
             then
               echo "blue"
-              kubectl set image deployment capstone-deploy-green capstone=$IMAGE_NAME:$CIRCLE_SHA1
+              #kubectl set image deployment capstone-deploy-green capstone=$IMAGE_NAME:$CIRCLE_SHA1
+              kubectl set image deployment capstone-deploy-green capstone=${IMAGE_NAME}:${CIRCLE_WORKFLOW_ID:0:7}
               kubectl rollout status deployment capstone-deploy-green
               kubectl get service capstone-service -o=yaml | sed -e "s/blue/green/g" | kubectl apply -f -
               echo "Switched to green deployment"
             else
               echo "green"
-              kubectl set image deployment capstone-deploy capstone=$IMAGE_NAME:$CIRCLE_SHA1
+              #kubectl set image deployment capstone-deploy capstone=$IMAGE_NAME:$CIRCLE_SHA1
+              kubectl set image deployment capstone-deploy capstone=${IMAGE_NAME}:${CIRCLE_WORKFLOW_ID:0:7}
               kubectl rollout status deployment capstone-deploy
               kubectl get service capstone-service -o=yaml | sed -e "s/green/blue/g" | kubectl apply -f -
               echo "Switched to blue deployment"
