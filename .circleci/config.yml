@@ -108,7 +108,9 @@ jobs:
             echo "$DOCKERHUB_ACCESS_TOKEN" | docker login -u "$DOCKERHUB_USERNAME" --password-stdin
             #docker push "${IMAGE_NAME}:1"
             #docker push leoadams/capstone:latest
+
             docker push "${IMAGE_NAME}:${CIRCLE_SHA1}"
+            
             #docker push "${IMAGE_NAME}:blue"
             # if [ "$ {CIRCLE_BRANCH}" == "master" ]; then
             #   login="$(aws ecr get-login)"
