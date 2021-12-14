@@ -206,17 +206,17 @@ jobs:
                 --instance-types t2.small
               fi
 
-              aws eks update-kubeconfig --name capstone-eks --region us-west-2
+              #aws eks update-kubeconfig --name capstone-eks --region us-west-2
 
-              curl -LO https://storage.googleapis.com/kubernetes-release/release/$(curl -s https://storage.googleapis.com/kubernetes-release/release/stable.txt)/bin/linux/amd64/kubectl
-              chmod +x ./kubectl && mv ./kubectl /usr/local/bin/kubectl
+              #curl -LO https://storage.googleapis.com/kubernetes-release/release/$(curl -s https://storage.googleapis.com/kubernetes-release/release/stable.txt)/bin/linux/amd64/kubectl
+              #chmod +x ./kubectl && mv ./kubectl /usr/local/bin/kubectl
 
               #kubectl get deploy capstone-deploy -o=yaml | sed -e "s/$BlueVersion/${{CF_SHORT_REVISION}}/g" | kubectl apply --namespace=${NAMESPACE} -f - #Update Service YAML with Green version
               #kubectl patch deploy capstone-deploy -p "{\"spec\":{\"template\": {\"spec\": {\"template\": \"containers[0]\": \"${VERSION}\"}}}}"
 
-              kubectl get service
-              export BlueVersion=$(kubectl get service capstone-service -o=jsonpath='{.spec.selector.version}')
-              echo $BlueVersion
+              #kubectl get service
+              #export BlueVersion=$(kubectl get service capstone-service -o=jsonpath='{.spec.selector.version}')
+              #echo $BlueVersion
 
               # if [[ -n $BlueVersion ]]; then 
               #   echo "show"; 
@@ -224,26 +224,25 @@ jobs:
               #   echo "missing"; 
               # fi
 
-              kubectl get deployment capstone-deploy-${BlueVersion} -o=yaml | sed -e "s/$BlueVersion/${CIRCLE_SHA1}/g" | kubectl apply -f - #Deploy new version
+              #kubectl get deployment capstone-deploy-${BlueVersion} -o=yaml | sed -e "s/$BlueVersion/${CIRCLE_SHA1}/g" | kubectl apply -f - #Deploy new version
 
-              kubectl rollout status deployment/capstone-deploy-${CIRCLE_SHA1}
+              #kubectl rollout status deployment/capstone-deploy-${CIRCLE_SHA1}
 
-              URL=$(kubectl get service capstone-service -o=jsonpath='{.status.loadBalancer.ingress[0].hostname}')
-              echo $URL
-              echo "getting page"
-              page=$(curl -s $URL:8080)
-              echo $page
+              #URL=$(kubectl get service capstone-service -o=jsonpath='{.status.loadBalancer.ingress[0].hostname}')
+              #echo $URL
+              #echo "getting page"
+              #page=$(curl -s $URL:8080)
+              #echo $page
 
-              if [[ -n $page ]]
-              then
-                echo "success"
-                kubectl get service capstone-service -o=yaml | sed -e "s/$BlueVersion/${CIRCLE_SHA1}/g" | kubectl apply -f -
-                kubectl delete deployment capstone-deploy-$BlueVersion #Delete blue version
-                return 0
-              else
-                echo "fail"
-                return 1
-              fi
+              #if [[ -n $page ]]
+              #then
+              #   echo "success"
+              #   kubectl get service capstone-service -o=yaml | sed -e "s/$BlueVersion/${CIRCLE_SHA1}/g" | kubectl apply -f -
+              #   kubectl delete deployment capstone-deploy-$BlueVersion #Delete blue version
+              # else
+              #   echo "fail"
+              #   kubectl delete deployment capstone-deploy-${CIRCLE_SHA1} #Delete blue version
+              # fi
 
 
               # if [[ -n $role_nodes_arn ]]; then
@@ -299,7 +298,70 @@ jobs:
 #       - destroy-environment:
 #           workflow_id: ${CIRCLE_WORKFLOW_ID:0:7}
 #       - slack-fail-notification
-         
+
+  deploy:
+    environment:
+      IMAGE_NAME: leoadams/capstone
+    docker:
+      # Docker image here that supports AWS CLI
+      - image: amazon/aws-cli
+    steps:
+      # Checkout code from git
+      - checkout
+      - run:
+          name: Install dependencies
+          command: |
+            yum -y install tar gzip jq
+      
+      - run:
+          name: deploy blue green
+          command: |
+            aws eks update-kubeconfig --name capstone-eks --region us-west-2
+
+            curl -LO https://storage.googleapis.com/kubernetes-release/release/$(curl -s https://storage.googleapis.com/kubernetes-release/release/stable.txt)/bin/linux/amd64/kubectl
+            chmod +x ./kubectl && mv ./kubectl /usr/local/bin/kubectl
+
+            export BlueVersion=$(kubectl get service capstone-service -o=jsonpath='{.spec.selector.version}')
+            echo $BlueVersion
+
+            #kubectl rollout status deployment/capstone-deploy-${CIRCLE_SHA1}
+
+            #URL=$(kubectl get service capstone-service -o=jsonpath='{.status.loadBalancer.ingress[0].hostname}')
+            #echo $URL
+            #echo "getting page"
+            #page=$(curl -s $URL:8080)
+            #echo $page
+
+            #if [[ -n $page ]]
+            #then
+            #   echo "success"
+            #   kubectl get service capstone-service -o=yaml | sed -e "s/$BlueVersion/${CIRCLE_SHA1}/g" | kubectl apply -f -
+            #   kubectl delete deployment capstone-deploy-$BlueVersion #Delete blue version
+            # else
+            #   echo "fail"
+            #   kubectl delete deployment capstone-deploy-${CIRCLE_SHA1} #Delete blue version
+            # fi
+
+            kubectl get service capstone-service -o=yaml | sed -e "s/${BlueVersion}/S{green}/g" | kubectl apply -f -
+
+            URL=$(kubectl get service capstone-service -o=jsonpath='{.status.loadBalancer.ingress[0].hostname}')
+            echo $URL
+            echo "getting page"
+            page=$(curl -s $URL:8080)
+            echo $page
+
+            if [[ -n $page ]]
+            then
+              echo "success"
+              kubectl delete deployment capstone-deploy-${BlueVersion}
+            else
+              echo "fail"
+              kubectl delete deployment capstone-deploy-${CIRCLE_SHA1}
+            fi
+
+
+
+
 workflows:
   default:
     jobs:
@@ -308,3 +370,5 @@ workflows:
           requires: [linting]    
       - deploy-infrastructure:
           requires: [build]
+      - deploy:
+          requires: [deploy-infrastructure]
