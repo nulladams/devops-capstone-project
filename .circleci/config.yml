@@ -488,7 +488,7 @@ jobs:
             #   kubectl delete deployment capstone-deploy-${CIRCLE_SHA1} #Delete blue version
             # fi
 
-            kubectl apply -f src/k8s/deploy-green.yaml
+            kubectl apply -f src/k8s/deployments/deploy-green.yaml
 
             kubectl get service capstone-service -o=yaml | sed -e "s/${BlueVersion}/green/g" | kubectl apply -f -
 
