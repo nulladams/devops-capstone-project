@@ -404,7 +404,7 @@ jobs:
       - run:
           name: Install dependencies
           command: |
-            yum -y install tar gzip jq
+            yum -y install tar gzip jq git
       
       - run:
           name: deploy blue green
@@ -551,11 +551,11 @@ workflows:
             branches:
               only: [infra]      
       #    requires: [build]
-      # - deploy:
-      #     requires: [deploy-infrastructure]
-      #     filters:
-      #       branches:
-      #         only: [main]
+      - deploy:
+          requires: [build]
+          filters:
+            branches:
+              only: [main]
       # - deploy-green:
       #     requires: [build-green]
       #     filters:
