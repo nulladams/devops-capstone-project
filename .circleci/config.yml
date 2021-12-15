@@ -536,11 +536,14 @@ workflows:
   default:
     jobs:
       - linting
+          filters:
+            branches:
+              only: [dev]
       - build:
           requires: [linting]
           filters:
             branches:
-              only: [main]
+              only: [dev]
       # - build-green:
       #     requires: [linting]
       #     filters:
