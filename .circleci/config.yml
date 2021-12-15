@@ -87,7 +87,8 @@ jobs:
             
             #docker build --cache-from=capstone -t "${IMAGE_NAME}:${CIRCLE_SHA1}" .
             #docker build --cache-from=capstone -t "${IMAGE_NAME}:blue" . 
-            docker build --cache-from=capstone -t "${IMAGE_NAME}:${CIRCLE_WORKFLOW_ID:0:7}" .
+            #docker build --cache-from=capstone -t "${IMAGE_NAME}:${CIRCLE_WORKFLOW_ID:0:7}" .
+            docker build --cache-from=capstone -t "${IMAGE_NAME}:latest" .
             docker image ls
             
       - run:
@@ -111,7 +112,8 @@ jobs:
             #docker push leoadams/capstone:latest
 
             #docker push "${IMAGE_NAME}:${CIRCLE_SHA1}"
-            docker push "${IMAGE_NAME}:${CIRCLE_WORKFLOW_ID:0:7}"
+            #docker push "${IMAGE_NAME}:${CIRCLE_WORKFLOW_ID:0:7}"
+            docker push "${IMAGE_NAME}:latest"
 
             #docker push "${IMAGE_NAME}:blue"
             # if [ "$ {CIRCLE_BRANCH}" == "master" ]; then

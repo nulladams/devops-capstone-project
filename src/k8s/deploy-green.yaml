@@ -24,7 +24,7 @@ spec:
     spec:
       containers:
       - name: capstone
-        image: leoadams/capstone:green
+        image: leoadams/capstone:latest
         imagePullPolicy: Always
         ports:
           - containerPort: 80
