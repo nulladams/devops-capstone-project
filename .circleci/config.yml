@@ -415,7 +415,7 @@ jobs:
             chmod +x ./kubectl && mv ./kubectl /usr/local/bin/kubectl
 
             git --version
-            git log --oneline
+            git log --oneline -5
             echo << pipeline.project.git_url >>
             echo << pipeline.git.base_revision >>
             echo <<pipeline.git.revision>>
