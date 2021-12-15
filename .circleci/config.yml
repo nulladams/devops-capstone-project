@@ -536,7 +536,7 @@ jobs:
 workflows:
   default:
     jobs:
-      - linting
+      - linting:
           filters:
             branches:
               only: [dev]
