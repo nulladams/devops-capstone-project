@@ -536,20 +536,20 @@ workflows:
           filters:
             branches:
               only: [main]
-      - build-green:
-          requires: [linting]
-          filters:
-            branches:
-              only: [green]
+      # - build-green:
+      #     requires: [linting]
+      #     filters:
+      #       branches:
+      #         only: [green]
       - deploy-infrastructure:
           requires: [build]
-      - deploy:
-          requires: [deploy-infrastructure]
-          filters:
-            branches:
-              only: [main]
-      - deploy-green:
-          requires: [build-green]
-          filters:
-            branches:
-              only: [green]
+      # - deploy:
+      #     requires: [deploy-infrastructure]
+      #     filters:
+      #       branches:
+      #         only: [main]
+      # - deploy-green:
+      #     requires: [build-green]
+      #     filters:
+      #       branches:
+      #         only: [green]
