@@ -415,6 +415,7 @@ jobs:
             chmod +x ./kubectl && mv ./kubectl /usr/local/bin/kubectl
 
             git --version
+            git log --oneline
             # # export BlueVersion=$(kubectl get service capstone-service -o=jsonpath='{.spec.selector.version}')
             # # echo $BlueVersion
 
