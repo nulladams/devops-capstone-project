@@ -88,7 +88,8 @@ jobs:
             #docker build --cache-from=capstone -t "${IMAGE_NAME}:${CIRCLE_SHA1}" .
             #docker build --cache-from=capstone -t "${IMAGE_NAME}:blue" . 
             #docker build --cache-from=capstone -t "${IMAGE_NAME}:${CIRCLE_WORKFLOW_ID:0:7}" .
-            docker build --cache-from=capstone -t "${IMAGE_NAME}:latest" .
+            #docker build --cache-from=capstone -t "${IMAGE_NAME}:latest" .
+            docker build --cache-from=capstone -t "${IMAGE_NAME}:${CIRCLE_SHA1}" .
             docker image ls
             
       - run:
@@ -113,8 +114,9 @@ jobs:
 
             #docker push "${IMAGE_NAME}:${CIRCLE_SHA1}"
             #docker push "${IMAGE_NAME}:${CIRCLE_WORKFLOW_ID:0:7}"
-            docker push "${IMAGE_NAME}:latest"
-
+            
+            docker push "${IMAGE_NAME}:${CIRCLE_SHA1}"
+            echo ${CIRCLE_SHA1}
             #docker push "${IMAGE_NAME}:blue"
             # if [ "$ {CIRCLE_BRANCH}" == "master" ]; then
             #   login="$(aws ecr get-login)"
@@ -161,9 +163,9 @@ jobs:
             ls -la
             # docker build --tag=capstone .
             #docker build --cache-from=capstone -t "${IMAGE_NAME}:1" .
-            #docker build --cache-from=capstone -t "${IMAGE_NAME}:${CIRCLE_SHA1}" .
+            docker build --cache-from=capstone -t "${IMAGE_NAME}:${CIRCLE_SHA1}" .
 
-            docker build --cache-from=capstone -t "${IMAGE_NAME}:green" . 
+            #docker build --cache-from=capstone -t "${IMAGE_NAME}:green" . 
             docker image ls
             
       - run:
@@ -185,8 +187,9 @@ jobs:
             echo "$DOCKERHUB_ACCESS_TOKEN" | docker login -u "$DOCKERHUB_USERNAME" --password-stdin
             #docker push "${IMAGE_NAME}:1"
             #docker push leoadams/capstone:latest
-            #docker push "${IMAGE_NAME}:${CIRCLE_SHA1}"
-            docker push "${IMAGE_NAME}:green"
+            docker push "${IMAGE_NAME}:${CIRCLE_SHA1}"
+            echo ${CIRCLE_SHA1}
+            #docker push "${IMAGE_NAME}:green"
             # if [ "$ {CIRCLE_BRANCH}" == "master" ]; then
             #   login="$(aws ecr get-login)"
             #   ${login}
