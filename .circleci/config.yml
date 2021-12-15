@@ -223,7 +223,7 @@ jobs:
         
       - run: 
           name: create k8s cluster
-          command: | 
+          command: |
               subnets=$(aws cloudformation list-exports --query "Exports[?Name==\`SubnetIds\`].Value" --no-paginate --output text)
               secgroups=$(aws cloudformation list-exports --query "Exports[?Name==\`SecurityGroups\`].Value" --no-paginate --output text)
               echo $subnets
@@ -351,7 +351,7 @@ jobs:
               # aws iam attach-role-policy --role-name capstone-eks-role-nodes --policy-arn  arn:aws:iam::aws:policy/AmazonEKS_CNI_Policy
               # aws iam attach-role-policy --role-name capstone-eks-role-nodes --policy-arn  arn:aws:iam::aws:policy/AmazonEC2ContainerRegistryReadOnly
 
-      
+              git --version
 
 
       # - run:
