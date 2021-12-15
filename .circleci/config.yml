@@ -414,65 +414,66 @@ jobs:
             curl -LO https://storage.googleapis.com/kubernetes-release/release/$(curl -s https://storage.googleapis.com/kubernetes-release/release/stable.txt)/bin/linux/amd64/kubectl
             chmod +x ./kubectl && mv ./kubectl /usr/local/bin/kubectl
 
-            # export BlueVersion=$(kubectl get service capstone-service -o=jsonpath='{.spec.selector.version}')
-            # echo $BlueVersion
+            git --version
+            # # export BlueVersion=$(kubectl get service capstone-service -o=jsonpath='{.spec.selector.version}')
+            # # echo $BlueVersion
 
-            #kubectl rollout status deployment/capstone-deploy-${CIRCLE_SHA1}
+            # #kubectl rollout status deployment/capstone-deploy-${CIRCLE_SHA1}
             
 
-            #URL=$(kubectl get service capstone-service -o=jsonpath='{.status.loadBalancer.ingress[0].hostname}')
-            #echo $URL
-            #echo "getting page"
-            #page=$(curl -s $URL:8080)
-            #echo $page
+            # #URL=$(kubectl get service capstone-service -o=jsonpath='{.status.loadBalancer.ingress[0].hostname}')
+            # #echo $URL
+            # #echo "getting page"
+            # #page=$(curl -s $URL:8080)
+            # #echo $page
 
-            #if [[ -n $page ]]
-            #then
-            #   echo "success"
-            #   kubectl get service capstone-service -o=yaml | sed -e "s/$BlueVersion/${CIRCLE_SHA1}/g" | kubectl apply -f -
-            #   kubectl delete deployment capstone-deploy-$BlueVersion #Delete blue version
-            # else
-            #   echo "fail"
-            #   kubectl delete deployment capstone-deploy-${CIRCLE_SHA1} #Delete blue version
-            # fi
+            # #if [[ -n $page ]]
+            # #then
+            # #   echo "success"
+            # #   kubectl get service capstone-service -o=yaml | sed -e "s/$BlueVersion/${CIRCLE_SHA1}/g" | kubectl apply -f -
+            # #   kubectl delete deployment capstone-deploy-$BlueVersion #Delete blue version
+            # # else
+            # #   echo "fail"
+            # #   kubectl delete deployment capstone-deploy-${CIRCLE_SHA1} #Delete blue version
+            # # fi
 
-            export version=$(kubectl get service capstone-service -o=jsonpath='{.spec.selector.version}')
-            echo $version
+            # export version=$(kubectl get service capstone-service -o=jsonpath='{.spec.selector.version}')
+            # echo $version
 
-            if [[ $version == "blue" ]]
-            then
-              echo "blue"
-              #kubectl set image deployment capstone-deploy-green capstone=$IMAGE_NAME:$CIRCLE_SHA1
-              kubectl set image deployment capstone-deploy-green capstone=${IMAGE_NAME}:${CIRCLE_WORKFLOW_ID:0:7}
-              kubectl rollout status deployment capstone-deploy-green
-              kubectl get service capstone-service -o=yaml | sed -e "s/blue/green/g" | kubectl apply -f -
-              echo "Switched to green deployment"
-            else
-              echo "green"
-              #kubectl set image deployment capstone-deploy capstone=$IMAGE_NAME:$CIRCLE_SHA1
-              kubectl set image deployment capstone-deploy capstone=${IMAGE_NAME}:${CIRCLE_WORKFLOW_ID:0:7}
-              kubectl rollout status deployment capstone-deploy
-              kubectl get service capstone-service -o=yaml | sed -e "s/green/blue/g" | kubectl apply -f -
-              echo "Switched to blue deployment"
-            fi
-
-            #kubectl get service capstone-service -o=yaml | sed -e "s/${BlueVersion}/${CIRCLE_SHA1}/g" | kubectl apply -f -
-            #kubectl get service capstone-service -o=yaml | sed -e "s/green/${CIRCLE_SHA1}/g" | kubectl apply -f -
-
-            URL=$(kubectl get service capstone-service -o=jsonpath='{.status.loadBalancer.ingress[0].hostname}')
-            echo $URL
-            echo "getting page"
-            page=$(curl -s $URL:8080)
-            echo $page
-
-            # if [[ -n $page ]]
+            # if [[ $version == "blue" ]]
             # then
-            #   echo "success"
-            #   kubectl delete deployment capstone-deploy-green
+            #   echo "blue"
+            #   #kubectl set image deployment capstone-deploy-green capstone=$IMAGE_NAME:$CIRCLE_SHA1
+            #   kubectl set image deployment capstone-deploy-green capstone=${IMAGE_NAME}:${CIRCLE_WORKFLOW_ID:0:7}
+            #   kubectl rollout status deployment capstone-deploy-green
+            #   kubectl get service capstone-service -o=yaml | sed -e "s/blue/green/g" | kubectl apply -f -
+            #   echo "Switched to green deployment"
             # else
-            #   echo "fail"
-            #   kubectl delete deployment capstone-deploy-${CIRCLE_SHA1}
+            #   echo "green"
+            #   #kubectl set image deployment capstone-deploy capstone=$IMAGE_NAME:$CIRCLE_SHA1
+            #   kubectl set image deployment capstone-deploy capstone=${IMAGE_NAME}:${CIRCLE_WORKFLOW_ID:0:7}
+            #   kubectl rollout status deployment capstone-deploy
+            #   kubectl get service capstone-service -o=yaml | sed -e "s/green/blue/g" | kubectl apply -f -
+            #   echo "Switched to blue deployment"
             # fi
+
+            # #kubectl get service capstone-service -o=yaml | sed -e "s/${BlueVersion}/${CIRCLE_SHA1}/g" | kubectl apply -f -
+            # #kubectl get service capstone-service -o=yaml | sed -e "s/green/${CIRCLE_SHA1}/g" | kubectl apply -f -
+
+            # URL=$(kubectl get service capstone-service -o=jsonpath='{.status.loadBalancer.ingress[0].hostname}')
+            # echo $URL
+            # echo "getting page"
+            # page=$(curl -s $URL:8080)
+            # echo $page
+
+            # # if [[ -n $page ]]
+            # # then
+            # #   echo "success"
+            # #   kubectl delete deployment capstone-deploy-green
+            # # else
+            # #   echo "fail"
+            # #   kubectl delete deployment capstone-deploy-${CIRCLE_SHA1}
+            # # fi
 
   deploy-green:
     environment:
