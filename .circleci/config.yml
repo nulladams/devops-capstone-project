@@ -549,7 +549,7 @@ workflows:
             branches:
               only: [main]
       - deploy-green:
-          requires: [deploy-infrastructure]
+          requires: [build-green]
           filters:
             branches:
               only: [green]
