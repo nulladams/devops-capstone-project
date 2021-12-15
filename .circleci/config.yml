@@ -552,7 +552,7 @@ workflows:
               only: [infra]      
       #    requires: [build]
       - deploy:
-          requires: [build]
+      #    requires: [build]
           filters:
             branches:
               only: [main]
