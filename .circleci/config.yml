@@ -69,7 +69,7 @@ jobs:
           command:
             apk update && apk upgrade && apk add python3
             
-            # python -m pip install awscli
+            python -m pip install awscli
 
       - run:
           name: Load Docker image layer cache
