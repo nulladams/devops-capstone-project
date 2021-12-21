@@ -6,8 +6,8 @@ pipeline {
         kind: Pod
         spec:
           containers:
-          - name: alpine
-            image: alpine
+          - name: aws
+            image: amazon/aws-cli
             command:
             - cat
             tty: true
@@ -15,9 +15,9 @@ pipeline {
     }
   }
   stages {
-    stage('Run alpine') {
+    stage('build') {
       steps {
-        container('alpine') {
+        container('aws') {
           sh 'echo test'
         }
       }
