@@ -19,6 +19,8 @@ pipeline {
       steps {
         container('aws') {
           sh 'echo test'
+          sh 'aws --version'
+          sh 'docker --version'
         }
       }
     }
