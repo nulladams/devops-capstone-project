@@ -35,6 +35,8 @@ pipeline {
           sh 'apk add --no-cache python3 py3-pip'
           sh 'apk add curl'
           sh 'python3 -m pip install awscli'
+          sh 'aws --version'
+          sh 'docker build -t capstone:latest .'
         }
       }
     }
