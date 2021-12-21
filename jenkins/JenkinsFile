@@ -25,7 +25,6 @@ pipeline {
         container('aws') {
           sh 'echo test'
           sh 'aws --version'
-          sh 'git --version'
         }
         container('docker') {
           sh 'echo test docker'
