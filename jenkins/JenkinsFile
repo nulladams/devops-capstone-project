@@ -1,58 +1,54 @@
-// pipeline {
-//   agent {
-//     kubernetes {
-//       yaml '''
-//         apiVersion: v1
-//         kind: Pod
-//         spec:
-//           containers:
-//           - name: aws
-//             image: amazon/aws-cli
-//             command:
-//             - cat
-//             tty: true
-//           - name: docker
-//             image: docker
-//             command:
-//             - cat
-//             tty: true
-//         '''
-//     }
-//   }
-//   stages {
-//     stage('build') {
-//       steps {
-//         container('aws') {
-//           sh 'echo test'
-//           sh 'aws --version'
-//         }
-//         container('docker') {
-//           sh 'echo test docker'
-//           sh 'docker --version'
-//           sh 'apk add --no-cache git'
-//         }
-//       }
-//     }
-//   }
-// }
+pipeline {
+  agent {
+    kubernetes {
+      yaml '''
+        apiVersion: v1
+        kind: Pod
+        spec:
+          containers:
+          - name: aws
+            image: amazon/aws-cli
+            command:
+            - cat
+            tty: true
+          - name: docker
+            image: docker
+            command:
+            - cat
+            tty: true
+        '''
+    }
+  }
+  stages {
+    stage('build') {
+      steps {
+        container('aws') {
+          sh 'echo test'
+          sh 'aws --version'
+        }
+        container('docker') {
+          sh 'echo test docker'
+          sh 'docker --version'
+          sh 'apk add --no-cache git'
+        }
+      }
+    }
+  }
+}
 
-node('jenkins-slave') {
+// node('jenkins-slave') {
 
-    checkout scm
-    def customImage = docker.build("capstone:${env.BUILD_ID}")
-    customImage.push()
-
-    customImage.push('latest')
+//     checkout scm
     
-    //  stage('test pipeline') {
-    //     sh(script: """
-    //         echo "hello"
-    //        git clone https://github.com/nulladams/devops-capstone-project.git
+//     //  stage('test pipeline') {
+//     //     sh(script: """
+//     //         echo "hello"
+//     //        git clone https://github.com/nulladams/devops-capstone-project.git
            
             
-    //         ls -lah /var/run
+//     //         ls -lah /var/run
 
 
-    //     """)
-    // }
-}
+//     //     """)
+//     // }
+// }
