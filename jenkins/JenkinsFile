@@ -1,14 +1,41 @@
-node('jenkins-slave') {
+pipeline {
+  agent {
+    kubernetes {
+      yaml '''
+        apiVersion: v1
+        kind: Pod
+        spec:
+          containers:
+          - name: alpine
+            image: alpine
+            command:
+            - cat
+            tty: true
+        '''
+    }
+  }
+  stages {
+    stage('Run alpine') {
+      steps {
+        container('alpine') {
+          sh 'echo test'
+        }
+      }
+    }
+  }
+}
+
+// node('jenkins-slave') {
     
-     stage('test pipeline') {
-        sh(script: """
-            echo "hello"
-           git clone https://github.com/nulladams/devops-capstone-project.git
+//      stage('test pipeline') {
+//         sh(script: """
+//             echo "hello"
+//            git clone https://github.com/nulladams/devops-capstone-project.git
            
             
-            ls -lah /var/run
+//             ls -lah /var/run
 
 
-        """)
-    }
-}
+//         """)
+//     }
+// }
