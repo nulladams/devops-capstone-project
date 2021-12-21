@@ -32,7 +32,7 @@ pipeline {
           sh 'docker --version'
         //   sh 'apk add --no-cache git'
           sh 'git --version'
-          sh 'apk add python'
+          sh 'apk add --no-cache python3 py3-pip'
           sh 'apk add curl'
           sh 'python -m pip install awscli'
         }
